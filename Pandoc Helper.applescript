@@ -17,7 +17,7 @@ on open the_file
 		set input_format to "markdown"
 		set describe_input to "Markdown"
 	else if file_extension = "docx" then
-		set input_format to "docx"
+		set input_format to "docx --wrap=none"
 		set describe_input to "Word document"
 	else if file_extension = "icml" then
 		set input_format to "icml"
@@ -94,7 +94,7 @@ on run
 		set input_format to "markdown"
 		set describe_input to "Markdown"
 	else if file_extension = "docx" then
-		set input_format to "docx"
+		set input_format to "docx --wrap=none"
 		set describe_input to "Word document"
 	else if file_extension = "icml" then
 		set input_format to "icml"
