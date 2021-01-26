@@ -34,13 +34,15 @@ on open the_file
 		return 0
 	end if
 	
-	set theResponse to choose from list {"InCopy", "Word Document", "Markdown", "HTML", "PDF (Requires LaTeX)", "Custom"} with title "Markdown Converter" with prompt "Convert " & describe_input & " to: " default items "InCopy"
+	set theResponse to choose from list {"InCopy", "Word Document - Default", "Word Document - Santa Fean Magazine", "Markdown", "HTML", "PDF (Requires LaTeX)", "Custom"} with title "Markdown Converter" with prompt "Convert " & describe_input & " to: " default items "InCopy"
 	
 	if theResponse = {"InCopy"} then
 		set output_format to "icml"
 		set output_file to replace_chars(the_file, "." & file_extension, ".icml")
-	else if theResponse = {"Word Document"} then
+	else if theResponse = {"Word Document - Default"} then
 		set output_format to "docx"
+	else if theResponse = {"Word Document - Santa Fean Magazine"} then
+		set output_format to "docx --reference-doc='/Applications/Pandoc Helper/Templates/SantaFean.docx'"
 		set output_file to replace_chars(the_file, "." & file_extension, ".docx")
 	else if theResponse = {"Markdown"} then
 		set output_format to "markdown --atx-headers"
@@ -111,13 +113,15 @@ on run
 		return 0
 	end if
 	
-	set theResponse to choose from list {"InCopy", "Word Document", "Markdown", "HTML", "PDF (Requires LaTeX)", "Custom"} with title "Markdown Converter" with prompt "Convert " & describe_input & " to: " default items "InCopy"
+	set theResponse to choose from list {"InCopy", "Word Document - Default", "Word Document - Santa Fean Magazine", "Markdown", "HTML", "PDF (Requires LaTeX)", "Custom"} with title "Markdown Converter" with prompt "Convert " & describe_input & " to: " default items "InCopy"
 	
 	if theResponse = {"InCopy"} then
 		set output_format to "icml"
 		set output_file to replace_chars(the_file, "." & file_extension, ".icml")
-	else if theResponse = {"Word Document"} then
+	else if theResponse = {"Word Document - Default"} then
 		set output_format to "docx"
+	else if theResponse = {"Word Document - Santa Fean Magazine"} then
+		set output_format to "docx --reference-doc='/Applications/Pandoc Helper/Templates/SantaFean.docx'"
 		set output_file to replace_chars(the_file, "." & file_extension, ".docx")
 	else if theResponse = {"Markdown"} then
 		set output_format to "markdown --atx-headers"
