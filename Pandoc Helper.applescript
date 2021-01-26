@@ -41,6 +41,7 @@ on open the_file
 		set output_file to replace_chars(the_file, "." & file_extension, ".icml")
 	else if theResponse = {"Word Document - Default"} then
 		set output_format to "docx"
+		set output_file to replace_chars(the_file, "." & file_extension, ".docx")
 	else if theResponse = {"Word Document - Santa Fean Magazine"} then
 		set output_format to "docx --reference-doc='/Applications/Pandoc Helper/Templates/SantaFean.docx'"
 		set output_file to replace_chars(the_file, "." & file_extension, ".docx")
@@ -120,6 +121,7 @@ on run
 		set output_file to replace_chars(the_file, "." & file_extension, ".icml")
 	else if theResponse = {"Word Document - Default"} then
 		set output_format to "docx"
+		set output_file to replace_chars(the_file, "." & file_extension, ".docx")
 	else if theResponse = {"Word Document - Santa Fean Magazine"} then
 		set output_format to "docx --reference-doc='/Applications/Pandoc Helper/Templates/SantaFean.docx'"
 		set output_file to replace_chars(the_file, "." & file_extension, ".docx")
