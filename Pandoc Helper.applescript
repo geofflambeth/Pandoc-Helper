@@ -11,6 +11,28 @@ on central_process(the_file)
 	set AppleScript's text item delimiters to "."
 	set file_extension to text item -1 of the_file
 	
+	tell application "Finder"
+		set jsonhelper_status to exists ("/Applications/JSON Helper.app")
+		set config_status to exists ("/Applications/Pandoc Helper/Config/config.json")
+		return jsonhelper_status
+	end tell
+	
+	if exists ("/Application/JSON Helper.app") then
+		if exists ("/Applications/Pandoc Helper/Config/config.json") then
+			set configLocation to "/Applications/Pandoc Helper/Config/config.json"
+			set configRaw to read configLocation
+		else
+			set configRaw to "{\"customReferenceDoc\": false, \"referenceDocLocation\": \"undefined\"}"
+		end if
+		tell application "JSON Helper"
+			set config to (read JSON from configRaw)
+			tell config
+				set customReferenceDoc to its customReferenceDoc
+				set referenceDocLocation to its referenceDocLocation
+			end tell
+		end tell
+	end if
+	
 	if file_extension = "md" then
 		set input_format to "markdown"
 		set describe_input to "Markdown"
@@ -32,7 +54,7 @@ on central_process(the_file)
 		return 0
 	end if
 	
-	set theResponse to choose from list {"InCopy", "Word Document - Default", "Word Document - Santa Fean Magazine", "Markdown", "HTML", "PDF (Requires LaTeX)", "Custom"} with title "Markdown Converter" with prompt "Convert " & describe_input & " to: " default items "InCopy"
+	set theResponse to choose from list {"InCopy", "Word Document - Default", "Word Document - Santa Fean Magazine", "Word Document - Custom Reference", "Markdown", "HTML", "PDF (Requires LaTeX)", "Custom"} with title "Markdown Converter" with prompt "Convert " & describe_input & " to: " default items "InCopy"
 	
 	if theResponse = {"InCopy"} then
 		set output_format to "icml"
@@ -42,6 +64,15 @@ on central_process(the_file)
 		set output_file to replace_chars(the_file, "." & file_extension, ".docx")
 	else if theResponse = {"Word Document - Santa Fean Magazine"} then
 		set output_format to "docx --reference-doc='/Applications/Pandoc Helper/Templates/SantaFean.docx'"
+		set output_file to replace_chars(the_file, "." & file_extension, ".docx")
+	else if theResponse = {"Word Document - Custom Reference"} then
+		if customReferenceDoc is true then
+			set referenceDoc to referenceDocLocation
+		else
+			set referenceDoc to choose file with prompt "Select reference document (.docx):"
+		end if
+		set referenceDoc to POSIX path of referenceDoc
+		set output_format to "docx --reference-doc='" & referenceDoc & "'"
 		set output_file to replace_chars(the_file, "." & file_extension, ".docx")
 	else if theResponse = {"Markdown"} then
 		set output_format to "markdown --atx-headers"
