@@ -7,19 +7,30 @@ on replace_chars(this_text, search_string, replacement_string)
 	return this_text
 end replace_chars
 
+on FinderItemExists(thePath)
+	try
+		set thePath to thePath as alias
+	on error
+		return false
+	end try
+	return true
+end FinderItemExists
+
 on central_process(the_file)
 	set AppleScript's text item delimiters to "."
 	set file_extension to text item -1 of the_file
 	
-	tell application "Finder"
-		set jsonhelper_status to exists ("/Applications/JSON Helper.app")
-		set config_status to exists ("/Applications/Pandoc Helper/Config/config.json")
-		return jsonhelper_status
-	end tell
+	set jsonhelper_location to "/Applications/JSON Helper.app/"
+	set jsonhelper_location to POSIX file jsonhelper_location
+	set config_location to "/Applications/Pandoc Helper/Config/config.json"
+	set config_location to POSIX file config_location
 	
-	if exists ("/Application/JSON Helper.app") then
-		if exists ("/Applications/Pandoc Helper/Config/config.json") then
-			set configLocation to "/Applications/Pandoc Helper/Config/config.json"
+	set jsonhelper_status to FinderItemExists(jsonhelper_location)
+	set config_status to FinderItemExists(config_location)
+	
+	if jsonhelper_status is true then
+		if config_status is true then
+			set configLocation to config_location
 			set configRaw to read configLocation
 		else
 			set configRaw to "{\"customReferenceDoc\": false, \"referenceDocLocation\": \"undefined\"}"
@@ -31,6 +42,8 @@ on central_process(the_file)
 				set referenceDocLocation to its referenceDocLocation
 			end tell
 		end tell
+	else
+		set customReferenceDoc to false
 	end if
 	
 	if file_extension = "md" then
