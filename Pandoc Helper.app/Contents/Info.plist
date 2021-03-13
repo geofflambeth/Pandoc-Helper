@@ -26,11 +26,11 @@
 	<key>CFBundleIconFile</key>
 	<string>droplet</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.apple.ScriptEditor.id.Pandoc-Helper-CURRENT</string>
+	<string>com.apple.ScriptEditor.id.Pandoc-Helper</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Pandoc Helper CURRENT</string>
+	<string>Pandoc Helper</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -83,7 +83,7 @@
 		<key>positionOfDivider</key>
 		<real>443</real>
 		<key>savedFrame</key>
-		<string>22 491 700 678 0 0 1920 1175 </string>
+		<string>1307 376 700 678 0 0 3360 1865 </string>
 		<key>selectedTab</key>
 		<string>result</string>
 	</dict>
