@@ -16,13 +16,27 @@ on FinderItemExists(thePath)
 	return true
 end FinderItemExists
 
+on replaceText(search_string, replacement_text, this_document)
+	tell application "TextEdit"
+		open this_document
+		set AppleScript's text item delimiters to the search_string
+		set this_text to the text of the front document as list
+		set AppleScript's text item delimiters to the replacement_text
+		set the text of the front document to (this_text as string)
+		close this_document saving yes
+	end tell
+end replaceText
+
 on central_process(the_file)
 	set AppleScript's text item delimiters to "."
 	set file_extension to text item -1 of the_file
 	
 	set jsonhelper_location to "/Applications/JSON Helper.app/"
 	set jsonhelper_location to POSIX file jsonhelper_location
-	set config_location to "/Applications/Pandoc Helper/Config/config.json"
+	set config_location to (POSIX path of (path to me))
+	set AppleScript's text item delimiters to "/Scripts/main.scpt"
+	set config_location to text item 1 of config_location
+	set config_location to config_location & "/Config/config.json"
 	set config_location to POSIX file config_location
 	
 	set jsonhelper_status to FinderItemExists(jsonhelper_location)
@@ -44,6 +58,7 @@ on central_process(the_file)
 		end tell
 	else
 		set customReferenceDoc to false
+		set referenceDocLocation to "undefined"
 	end if
 	
 	if file_extension = "md" then
@@ -76,7 +91,7 @@ on central_process(the_file)
 		set output_format to "docx"
 		set output_file to replace_chars(the_file, "." & file_extension, ".docx")
 	else if theResponse = {"Word Document - Santa Fean Magazine"} then
-		set output_format to "docx --reference-doc='/Applications/Pandoc Helper/Templates/SantaFean.docx'"
+		set output_format to "docx --reference-doc='/Applications/Pandoc Helper/Config/SantaFean.docx'"
 		set output_file to replace_chars(the_file, "." & file_extension, ".docx")
 	else if theResponse = {"Word Document - Custom Reference"} then
 		if customReferenceDoc is true then
