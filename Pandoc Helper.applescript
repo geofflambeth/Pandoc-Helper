@@ -39,6 +39,8 @@ on central_process(the_file)
 	set config_location to config_location & "/Config/config.json"
 	set config_location to POSIX file config_location
 	
+	set AppleScript's text item delimiters to "."
+	
 	set jsonhelper_status to FinderItemExists(jsonhelper_location)
 	set config_status to FinderItemExists(config_location)
 	
@@ -70,7 +72,7 @@ on central_process(the_file)
 	else if file_extension = "icml" then
 		set input_format to "icml"
 		set describe_input to "InCopy"
-		display dialog "Pandoc does not support conversion from InCopy. Please use Adobe InCopy or InDesign for further edits on this file."
+		display dialog "Pandoc does not support conversion from InCopy. Please use Adobe's software suite for further edits on this file."
 		return 0
 	else if file_extension = "pdf" then
 		set input_format to "pdf"
@@ -78,20 +80,18 @@ on central_process(the_file)
 		display dialog "Pandoc does not support conversion from PDF. Please use another application for further edits on this file."
 		return 0
 	else
-		display dialog "This pandoc helper does not support conversion from this format. Please use pandoc using your computer's command line interface."
+		display dialog "This pandoc-based GUI does not currently support conversion from this format. Please use pandoc through a command line interface to continue this conversion." with title "Pandoc Helper"
 		return 0
 	end if
 	
-	set theResponse to choose from list {"InCopy", "Word Document - Default", "Word Document - Santa Fean Magazine", "Word Document - Custom Reference", "Markdown", "HTML", "PDF (Requires LaTeX)", "Custom"} with title "Markdown Converter" with prompt "Convert " & describe_input & " to: " default items "InCopy"
+	set responseOptions to {"InCopy", "Word Document - Pandoc Default", "Word Document - Custom Reference", "Markdown", "HTML", "PDF (Requires LaTeX)", "Custom"}
+	set theResponse to choose from list responseOptions with title "Pandoc Helper" with prompt "Convert " & describe_input & " to: " default items "InCopy"
 	
 	if theResponse = {"InCopy"} then
 		set output_format to "icml"
 		set output_file to replace_chars(the_file, "." & file_extension, ".icml")
-	else if theResponse = {"Word Document - Default"} then
+	else if theResponse = {"Word Document - Pandoc Default"} then
 		set output_format to "docx"
-		set output_file to replace_chars(the_file, "." & file_extension, ".docx")
-	else if theResponse = {"Word Document - Santa Fean Magazine"} then
-		set output_format to "docx --reference-doc='/Applications/Pandoc Helper/Config/SantaFean.docx'"
 		set output_file to replace_chars(the_file, "." & file_extension, ".docx")
 	else if theResponse = {"Word Document - Custom Reference"} then
 		if customReferenceDoc is true then
