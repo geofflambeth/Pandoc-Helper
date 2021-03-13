@@ -1,5 +1,5 @@
 {
   "INSTRUCTIONS FOR USE": "Install JSON Helper application from the Mac App Store to enable custom configurations of Pandoc Helper.",
   "customReferenceDoc": false,
-  "referenceDocLocation": "/Full/Path/To/Your/Custom/Reference/Document.docx",
+  "referenceDocLocation": "/Full/Path/To/Your/Custom/Reference/Document.docx"
 }
