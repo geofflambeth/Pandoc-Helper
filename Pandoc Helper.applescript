@@ -62,7 +62,7 @@ on central_process(the_file)
 		set customReferenceDoc to false
 		set referenceDocLocation to "undefined"
 	end if
-	
+		
 	if file_extension = "md" then
 		set input_format to "markdown"
 		set describe_input to "Markdown"
