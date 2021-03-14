@@ -27,6 +27,10 @@ on replaceText(search_string, replacement_text, this_document)
 	end tell
 end replaceText
 
+on appIsRunning(appName)
+	tell application "System Events" to (name of processes) contains appName
+end appIsRunning
+
 on central_process(the_file)
 	set AppleScript's text item delimiters to "."
 	set file_extension to text item -1 of the_file
@@ -39,25 +43,29 @@ on central_process(the_file)
 	set config_location to config_location & "/Config/config.json"
 	set config_location to POSIX file config_location
 	
-	set AppleScript's text item delimiters to "."
-	
 	set jsonhelper_status to FinderItemExists(jsonhelper_location)
 	set config_status to FinderItemExists(config_location)
+	set runningStatus to appIsRunning("JSON Helper")
 	
 	if jsonhelper_status is true then
-		if config_status is true then
-			set configLocation to config_location
-			set configRaw to read configLocation
-		else
-			set configRaw to "{\"customReferenceDoc\": false, \"referenceDocLocation\": \"undefined\"}"
-		end if
-		tell application "JSON Helper"
-			set config to (read JSON from configRaw)
-			tell config
-				set customReferenceDoc to its customReferenceDoc
-				set referenceDocLocation to its referenceDocLocation
+		if runningStatus is true then
+			if config_status is true then
+				set configLocation to config_location
+				set configRaw to read configLocation
+			else
+				set configRaw to "{\"customReferenceDoc\": false, \"referenceDocLocation\": \"undefined\"}"
+			end if
+			tell application "/Applications/JSON Helper.app"
+				set config to (read JSON from configRaw)
+				tell config
+					set customReferenceDoc to its customReferenceDoc
+					set referenceDocLocation to its referenceDocLocation
+				end tell
 			end tell
-		end tell
+		else
+			set customReferenceDoc to false
+			set referenceDocLocation to "undefined"
+		end if
 	else
 		set customReferenceDoc to false
 		set referenceDocLocation to "undefined"
