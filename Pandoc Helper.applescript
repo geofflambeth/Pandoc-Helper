@@ -34,9 +34,7 @@ on central_process(the_file)
 	set jsonhelper_location to "/Applications/JSON Helper.app/"
 	set jsonhelper_location to POSIX file jsonhelper_location
 	set config_location to (POSIX path of (path to me))
-	set AppleScript's text item delimiters to "/Scripts/main.scpt"
-	set config_location to text item 1 of config_location
-	set config_location to config_location & "/Config/config.json"
+	set config_location to config_location & "/Contents/Resources/Config/config.json"
 	set config_location to POSIX file config_location
 	
 	set jsonhelper_status to FinderItemExists(jsonhelper_location)
