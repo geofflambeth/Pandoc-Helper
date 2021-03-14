@@ -1,2 +1,5 @@
 ## Ignore Finder files
 .DS_Store
+
+## Ignore all files from /Releases
+Releases/
