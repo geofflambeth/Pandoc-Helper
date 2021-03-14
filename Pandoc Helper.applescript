@@ -27,10 +27,6 @@ on replaceText(search_string, replacement_text, this_document)
 	end tell
 end replaceText
 
-on appIsRunning(appName)
-	tell application "System Events" to (name of processes) contains appName
-end appIsRunning
-
 on central_process(the_file)
 	set AppleScript's text item delimiters to "."
 	set file_extension to text item -1 of the_file
@@ -45,16 +41,15 @@ on central_process(the_file)
 	
 	set jsonhelper_status to FinderItemExists(jsonhelper_location)
 	set config_status to FinderItemExists(config_location)
-	set runningStatus to appIsRunning("JSON Helper")
 	
 	if jsonhelper_status is true then
-		if runningStatus is true then
-			if config_status is true then
-				set configLocation to config_location
-				set configRaw to read configLocation
-			else
-				set configRaw to "{\"customReferenceDoc\": false, \"referenceDocLocation\": \"undefined\"}"
-			end if
+		if config_status is true then
+			set configLocation to config_location
+			set configRaw to read configLocation
+		else
+			set configRaw to "{\"customReferenceDoc\": false, \"referenceDocLocation\": \"undefined\"}"
+		end if
+		try
 			tell application "/Applications/JSON Helper.app"
 				set config to (read JSON from configRaw)
 				tell config
@@ -62,15 +57,15 @@ on central_process(the_file)
 					set referenceDocLocation to its referenceDocLocation
 				end tell
 			end tell
-		else
-			set customReferenceDoc to false
-			set referenceDocLocation to "undefined"
-		end if
+		on error
+			display dialog "\"JSON Helper.app\" appears to be installed but is not working correctly for the purposes of this pandoc shell. Please restart this application and try again." with title "Pandoc Helper"
+			return 0
+		end try
 	else
 		set customReferenceDoc to false
 		set referenceDocLocation to "undefined"
 	end if
-		
+	
 	if file_extension = "md" then
 		set input_format to "markdown"
 		set describe_input to "Markdown"
